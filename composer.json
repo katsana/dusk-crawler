@@ -1,39 +1,47 @@
 {
-    "name": "laravie/dusk-crawler",
+    "name": "katsana/dusk-crawler",
     "description": "Web Crawler using Laravel Dusk",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
+            "name": "KATSANA Developer",
+            "email": "developer@katsana.com"
+        },
+        {
             "name": "Mior Muhammad Zaki",
-            "email": "crynobone@gmail.com"
+            "email": "crynobone@gmail.com",
+            "role": "Developer"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Laravie\\DuskCrawler\\": "src"
+            "DuskCrawler\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Laravie\\DuskCrawler\\Tests\\": "tests"
+            "DuskCrawler\\Tests\\": "tests"
         }
     },
     "require": {
         "php": ">=7.2",
         "laravel/dusk": "^5.8.2",
-        "orchestra/dusk-updater": "^1.2",
         "orchestra/canvas-core": "^4.6",
+        "orchestra/dusk-updater": "^1.2",
         "symfony/dom-crawler": "^4.3 || ^5.0"
     },
     "require-dev": {
         "orchestra/canvas": "^4.5",
         "orchestra/testbench": "^4.5"
     },
+    "config": {
+        "sort-packages": true
+    },
     "extra": {
         "laravel": {
             "providers": [
-                "Laravie\\DuskCrawler\\DuskServiceProvider"
+                "DuskCrawler\\DuskServiceProvider"
             ]
         }
     },

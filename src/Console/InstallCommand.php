@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\DuskCrawler\Console;
+namespace DuskCrawler\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;

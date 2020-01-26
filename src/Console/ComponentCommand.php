@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\DuskCrawler\Console;
+namespace DuskCrawler\Console;
 
 use Orchestra\Canvas\Core\Commands\Generator;
 

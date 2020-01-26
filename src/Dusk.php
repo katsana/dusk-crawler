@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\DuskCrawler;
+namespace DuskCrawler;
 
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;

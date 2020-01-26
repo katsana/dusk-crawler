@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\DuskCrawler;
+namespace DuskCrawler;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\Browser;
