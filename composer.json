@@ -23,12 +23,13 @@
         "php": ">=7.2",
         "laravel/dusk": "^5.8.2",
         "orchestra/dusk-updater": "^1.2",
-        "orchestra/canvas-core": "^4.0",
+        "orchestra/canvas-core": "^4.6",
         "symfony/dom-crawler": "^4.3 || ^5.0"
     },
     "require-dev": {
         "orchestra/canvas": "^4.5",
         "orchestra/testbench": "^4.5"
     },
-    "minimum-stability": "stable"
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }

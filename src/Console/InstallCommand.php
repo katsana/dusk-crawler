@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Orchestra\Canvas\Core\CommandsProvider;
 use Orchestra\Canvas\Core\Contracts\GeneratesCodeListener;
+use Orchestra\Canvas\Core\Presets\Preset;
 
 class InstallCommand extends Command
 {
@@ -38,15 +39,14 @@ class InstallCommand extends Command
             $files->makeDirectory($this->laravel->path('Browser/Components'), 0755, true, true);
         }
 
-        $listener = new class() implements GeneratesCodeListener {
-            public function codeAlreadyExists(string $className)
-            {
-                return false;
-            }
+        $listener = new class($this->presetForLaravel($this->laravel)) implements GeneratesCodeListener {
+            use CodeGenerator;
 
-            public function codeHasBeenGenerated(string $className);
+            protected $preset;
+
+            public function __construct(Preset $preset)
             {
-                return true;
+                $this->preset = $preset;
             }
 
             public function getStubFile(): string
@@ -63,18 +63,9 @@ class InstallCommand extends Command
             {
                 return 'BasePage';
             }
-
-            public function generatorOptions(): array
-            {
-                return [
-                    'name' => $this->generatorName(),
-                ];
-            }
         }
 
-        $generator = new GeneratesCode($this->presetForLaravel($this->laravel), $listener);
-
-        if (!! $generator($listener->generatorName())) {
+        if (!! $listener->generateCode()) {
             $this->info('Dusk Crawler scaffolding installed successfully.');
         }
 
