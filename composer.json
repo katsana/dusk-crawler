@@ -30,6 +30,13 @@
         "orchestra/canvas": "^4.5",
         "orchestra/testbench": "^4.5"
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laravie\\DuskCrawler\\DuskServiceProvider"
+            ]
+        }
+    },
     "prefer-stable": true,
     "minimum-stability": "dev"
 }
