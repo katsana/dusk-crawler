@@ -63,7 +63,7 @@ class InstallCommand extends Command
             {
                 return 'BasePage';
             }
-        }
+        };
 
         if (!! $listener->generateCode()) {
             $this->info('Dusk Crawler scaffolding installed successfully.');
