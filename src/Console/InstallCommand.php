@@ -79,7 +79,7 @@ class InstallCommand extends Command implements GeneratesCodeListener
      */
     public function getDefaultNamespace(string $rootNamespace): string
     {
-        return $rootNamespace.'/Browser/Pages';
+        return $rootNamespace.'\Browser\Pages';
     }
 
     /**
