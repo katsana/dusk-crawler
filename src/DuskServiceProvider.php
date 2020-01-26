@@ -32,7 +32,8 @@ class DuskServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-
+                Console\ComponentCommand::class,
+                Console\PageCommand::class,
             ]);
         }
     }

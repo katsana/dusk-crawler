@@ -24,3 +24,7 @@ provider:
 
 testing:
   namespace: Laravie\DuskCrawler\Tests
+
+generators:
+  - Orchestra\Canvas\Commands\Code
+  - Orchestra\Canvas\Commands\ConsoleGenerator
