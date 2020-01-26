@@ -4,13 +4,15 @@ namespace Laravie\DuskCrawler\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Orchestra\Canvas\Core\CodeGenerator;
 use Orchestra\Canvas\Core\CommandsProvider;
 use Orchestra\Canvas\Core\Contracts\GeneratesCodeListener;
 use Orchestra\Canvas\Core\Presets\Preset;
 
-class InstallCommand extends Command
+class InstallCommand extends Command implements GeneratesCodeListener
 {
-    use CommandsProvider;
+    use CodeGenerator,
+        CommandsProvider;
 
     /**
      * The name and signature of the console command.
@@ -33,42 +35,68 @@ class InstallCommand extends Command
      *
      * @return mixed
      */
-    public function handle(Filesystem $files)
+    public function handle(Filesystem $files, Preset $preset)
     {
         if (! $files->isDirectory($this->laravel->path('Browser/Components'))) {
             $files->makeDirectory($this->laravel->path('Browser/Components'), 0755, true, true);
         }
 
-        $listener = new class($this->presetForLaravel($this->laravel)) implements GeneratesCodeListener {
-            use CodeGenerator;
+        $this->setPreset($preset)->generateCode();
+    }
 
-            protected $preset;
+    /**
+     * Code already exists.
+     */
+    public function codeAlreadyExists(string $className)
+    {
+        $this->updateChromeDrivers();
 
-            public function __construct(Preset $preset)
-            {
-                $this->preset = $preset;
-            }
+        return 0;
+    }
 
-            public function getStubFile(): string
-            {
-                return __DIR__.'/stubs/page.install.stub';
-            }
+    /**
+     * Code successfully generated.
+     */
+    public function codeHasBeenGenerated(string $className)
+    {
+        $this->info('Dusk Crawler scaffolding installed successfully.');
 
-            public function getDefaultNamespace(string $rootNamespace): string
-            {
-                return $rootNamespace.'/Browser/Pages';
-            }
+        $this->updateChromeDrivers();
 
-            public function generatorName(): string
-            {
-                return 'BasePage';
-            }
-        };
+        exit 0;
+    }
 
-        if (!! $listener->generateCode()) {
-            $this->info('Dusk Crawler scaffolding installed successfully.');
-        }
+    /**
+     * Get the stub file for the generator.
+     */
+    public function getStubFile(): string
+    {
+        return __DIR__.'/stubs/page.install.stub';
+    }
 
+    /**
+     * Get the default namespace for the class.
+     */
+    public function getDefaultNamespace(string $rootNamespace): string
+    {
+        return $rootNamespace.'/Browser/Pages';
+    }
+
+    /**
+     * Get the desired generator name.
+     */
+    public function generatorName(): string
+    {
+        return 'Page';
+    }
+
+    /**
+     * Update Chrome Drivers.
+     *
+     * @return void
+     */
+    protected function updateChromeDrivers()
+    {
         $driverCommandArgs = ['--all' => true];
 
         if ($this->option('proxy')) {
