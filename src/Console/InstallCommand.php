@@ -63,7 +63,7 @@ class InstallCommand extends Command implements GeneratesCodeListener
 
         $this->updateChromeDrivers();
 
-        exit 0;
+        return 0;
     }
 
     /**
