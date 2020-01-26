@@ -1,0 +1,26 @@
+preset: package
+
+namespace: Laravie\DuskCrawler
+
+paths:
+  src: src
+  resource: resources
+
+factory:
+  path: database/factories
+
+migration:
+  path: database/migrations
+  prefix: ''
+
+console:
+  namespace: Laravie\DuskCrawler\Console
+
+model:
+  namespace: Laravie\DuskCrawler
+
+provider:
+  namespace: Laravie\DuskCrawler
+
+testing:
+  namespace: Laravie\DuskCrawler\Tests

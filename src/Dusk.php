@@ -35,7 +35,6 @@ class Dusk
      */
     protected $connectTimeout;
 
-
     /**
      * Initialises the dusk browser and starts the chrome driver.
      *
