@@ -30,6 +30,9 @@ class DuskServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Browser::$storeScreenshotsAt = \storage_path('app/Browser/screenshots');
+        Browser::$storeConsoleLogAt = \storage_path('logs');
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\InstallCommand::class,
