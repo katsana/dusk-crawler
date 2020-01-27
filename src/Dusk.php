@@ -196,16 +196,6 @@ class Dusk
     }
 
     /**
-     * Get the browser caller name.
-     *
-     * @return string
-     */
-    protected function getBrowserCallerName()
-    {
-        return $this->callerName;
-    }
-
-    /**
      * This method is used to allow compatibility with ProvidesBrowser which at the moment
      * rely on internal method PHPUnit\Framework\TestCase::getName().
      *
@@ -213,6 +203,6 @@ class Dusk
      */
     public function getName(bool $withDataSet = true): string
     {
-        return $this->getBrowserCallerName();
+        return $this->callerName;
     }
 }
