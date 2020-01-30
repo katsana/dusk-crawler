@@ -15,7 +15,9 @@ class DuskServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Browser::macro('waitUsingInspect', function ($seconds, Inspector $inspector) {
+        Browser::macro('waitUsingInspect', function ($seconds, $action) {
+            $inspector = $action instanceof Inspector ? $action : new Inspector($action);
+
             return $inspector->resolve(
                 $this->waitUsing($seconds, 100, function () use ($inspector) {
                     return $inspector->assert($this);
