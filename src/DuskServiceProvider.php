@@ -4,7 +4,6 @@ namespace DuskCrawler;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\Browser;
-use React\Promise\Promise;
 use Symfony\Component\DomCrawler\Crawler;
 
 class DuskServiceProvider extends ServiceProvider
@@ -17,22 +16,11 @@ class DuskServiceProvider extends ServiceProvider
     public function register()
     {
         Browser::macro('waitUsingInspect', function ($seconds, Inspector $inspector) {
-            $browser = $this;
-
-            $browser->waitUntil($seconds, 100, static function () use ($browser, $inspector) {
-                return $inspector->assert($browser);
-            });
-
-            return new Promise(function ($resolve, $reject) use ($browser, $inspector) {
-                try {
-                    $inspector->validate();
-                    $resolve($browser);
-                } catch (Throwable $e) {
-                    $reject($e);
-                }
-            }, static function () {
-                Dusk::closeAll();
-            });
+            return $inspector->resolve(
+                $this->waitUsing($seconds, 100, function () use ($inspector) {
+                    return $inspector->assert($this);
+                })
+            );
         });
 
         Browser::macro('crawler', function () {

@@ -2,7 +2,9 @@
 
 namespace DuskCrawler;
 
+use Closure;
 use Laravel\Dusk\Browser;
+use React\Promise\Promise;
 use Throwable;
 
 class Inspector
@@ -15,18 +17,18 @@ class Inspector
     protected $action;
 
     /**
-     * Abort exception.
+     * Aborted exception.
      *
-     * @var \Throwable|null
+     * @var \DuskCrawler\Exceptions\InspectionFailed|null
      */
-    protected $exception;
+    protected $failedException;
 
     /**
      * Construct a new inspector.
      *
      * @param callable $action
      */
-    public function __construct(callable $action)
+    public function __construct(Closure $action)
     {
         $this->action = $action;
     }
@@ -39,31 +41,35 @@ class Inspector
      */
     public function assert(Browser $browser)
     {
-        return \call_user_func($this->action, $browser, $inspector);
+        return \call_user_func($this->action, $browser, $this);
     }
 
     /**
      * Abort and exit the assertion.
-     *
-     * @param  \Throwable  $exception
-     * @return bool
      */
-    public function abort(Throwable $exception): bool
+    public function abort(string $abortedReason): bool
     {
-        $this->exception = $exception;
+        $this->failedException = new Exceptions\InspectionFailed($abortedReason);
 
         return true;
     }
+
 
     /**
      * Validate and throw if there is an exception.
      *
      * @return void
      */
-    public function validate(): void
+    public function resolve(Browser $browser): Promise
     {
-        if (! \is_null($exception)) {
-            throw $exception;
-        }
+        return new Promise(function ($resolve, $reject) use ($browser) {
+            if (\is_null($this->failedException)) {
+                $resolve($browser);
+            } else {
+                Dusk::closeAll();
+
+                $reject($this->failedException);
+            }
+        });
     }
 }
