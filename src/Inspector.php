@@ -66,10 +66,10 @@ class Inspector
             if (\is_null($this->failedException)) {
                 $resolve($browser);
             } else {
-                $browser->close();
-
                 $reject($this->failedException);
             }
+        }, static function () use ($browser) {
+            $browser->close();
         });
     }
 }
