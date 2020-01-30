@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravie\DuskCrawler;
+namespace DuskCrawler;
 
 use Laravel\Dusk\Browser;
 use Throwable;
@@ -63,6 +63,8 @@ class Inspector
     public function validate(): void
     {
         if (! \is_null($exception)) {
+            Dusk::closeAll();
+
             throw $exception;
         }
     }
