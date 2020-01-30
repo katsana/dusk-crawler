@@ -66,7 +66,7 @@ class Inspector
             if (\is_null($this->failedException)) {
                 $resolve($browser);
             } else {
-                Dusk::closeAll();
+                $browser->close();
 
                 $reject($this->failedException);
             }
