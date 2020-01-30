@@ -63,8 +63,6 @@ class Inspector
     public function validate(): void
     {
         if (! \is_null($exception)) {
-            Dusk::closeAll();
-
             throw $exception;
         }
     }

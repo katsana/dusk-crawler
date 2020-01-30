@@ -29,6 +29,7 @@
         "laravel/dusk": "^5.9",
         "orchestra/canvas-core": "^4.6",
         "orchestra/dusk-updater": "^1.2",
+        "react/promise": "^2.7",
         "symfony/dom-crawler": "^4.3 || ^5.0"
     },
     "require-dev": {
