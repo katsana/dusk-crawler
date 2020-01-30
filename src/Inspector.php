@@ -46,10 +46,14 @@ class Inspector
 
     /**
      * Abort and exit the assertion.
+     *
+     * @param  \Throwable|string $exception
      */
-    public function abort(string $abortedReason): bool
+    public function abort($exception): bool
     {
-        $this->failedException = new Exceptions\InspectionFailed($abortedReason);
+        $this->failedException = \is_string($exception)
+            ? Exceptions\InspectionFailed::make($exception)
+            : Exceptions\InspectionFailed::from($exception);
 
         return true;
     }
