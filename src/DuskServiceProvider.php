@@ -15,6 +15,14 @@ class DuskServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        Browser::macro('waitUsingInspect', function ($seconds, Inspector $inspector) {
+            return \tap($this->waitUntil($seconds, 100, function () use ($inspector) {
+                return $inspector->assert($this);
+            }), static function ($browser) use ($inspector) {
+                $inspector->validate();
+            });
+        });
+
         Browser::macro('crawler', function () {
             return new Crawler(
                 $this->driver->getPageSource() ?? '',
