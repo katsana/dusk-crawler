@@ -67,11 +67,11 @@ class Inspector
     public function resolve(Browser $browser): Promise
     {
         return new Promise(function ($resolve, $reject) use ($browser) {
-            if (\is_null($this->failedException)) {
-                $resolve($browser);
-            } else {
+            if (! \is_null($this->failedException)) {
                 $reject($this->failedException);
             }
+
+            $resolve($browser);
         }, static function () use ($browser) {
             $browser->close();
         });
