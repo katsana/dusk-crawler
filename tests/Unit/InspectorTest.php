@@ -46,4 +46,19 @@ class InspectorTest extends TestCase
         $this->assertTrue($inspector->assert($browser));
         $inspector->resolve($browser)->done();
     }
+
+    /** @test */
+    public function it_can_assert_abort_path_as_exception()
+    {
+        $this->expectException('DuskCrawler\Exceptions\InspectionFailed');
+        $this->expectExceptionMessage('Foobar');
+
+        $browser = m::mock(Browser::class);
+        $inspector = new Inspector(function ($browser, $inspector) {
+            return $inspector->abort(new \RuntimeException('Foobar'));
+        });
+
+        $this->assertTrue($inspector->assert($browser));
+        $inspector->resolve($browser)->done();
+    }
 }
