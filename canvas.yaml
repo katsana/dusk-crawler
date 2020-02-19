@@ -24,6 +24,8 @@ provider:
 
 testing:
   namespace: DuskCrawler\Tests
+  extends:
+      feature: DuskCrawler\Tests\TestCase
 
 generators:
   - Orchestra\Canvas\Commands\Code
