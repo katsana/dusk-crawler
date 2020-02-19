@@ -2,12 +2,16 @@
 
 namespace DuskCrawler;
 
+use Illuminate\Console\Application as Artisan;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\Browser;
 use Symfony\Component\DomCrawler\Crawler;
+use Orchestra\Canvas\Core\CommandsProvider;
 
 class DuskServiceProvider extends ServiceProvider
 {
+    use CommandsProvider;
+
     /**
      * Register services.
      *
@@ -44,11 +48,13 @@ class DuskServiceProvider extends ServiceProvider
         Browser::$storeConsoleLogAt = \storage_path('logs');
 
         if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\InstallCommand::class,
-                Console\ComponentCommand::class,
-                Console\PageCommand::class,
-            ]);
+            $preset = $this->presetForLaravel($this->app);
+
+            Artisan::starting(static function ($artisan) use ($preset) {
+                $artisan->add(new Console\InstallCommand());
+                $artisan->add(new Console\ComponentCommand($preset));
+                $artisan->add(new Console\PageCommand($preset));
+            });
         }
     }
 }

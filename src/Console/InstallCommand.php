@@ -61,8 +61,6 @@ class InstallCommand extends Command implements GeneratesCodeListener
     {
         $this->info('Dusk Crawler scaffolding installed successfully.');
 
-        $this->updateChromeDrivers();
-
         return 0;
     }
 
@@ -88,25 +86,5 @@ class InstallCommand extends Command implements GeneratesCodeListener
     public function generatorName(): string
     {
         return 'Page';
-    }
-
-    /**
-     * Update Chrome Drivers.
-     *
-     * @return void
-     */
-    protected function updateChromeDrivers()
-    {
-        $driverCommandArgs = ['--all' => true];
-
-        if ($this->option('proxy')) {
-            $driverCommandArgs['--proxy'] = $this->option('proxy');
-        }
-
-        if ($this->option('ssl-no-verify')) {
-            $driverCommandArgs['--ssl-no-verify'] = true;
-        }
-
-        $this->call('dusk:chrome-driver', $driverCommandArgs);
     }
 }
