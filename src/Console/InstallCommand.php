@@ -49,8 +49,6 @@ class InstallCommand extends Command implements GeneratesCodeListener
      */
     public function codeAlreadyExists(string $className)
     {
-        $this->updateChromeDrivers();
-
         return 0;
     }
 
