@@ -2,9 +2,9 @@
 
 namespace DuskCrawler\Tests\Unit;
 
-use Mockery as m;
-use Laravel\Dusk\Browser;
 use DuskCrawler\Inspector;
+use Laravel\Dusk\Browser;
+use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use React\Promise\Promise;
 
@@ -31,7 +31,6 @@ class InspectorTest extends TestCase
 
         $this->assertInstanceOf(Promise::class, $promise);
     }
-
 
     /** @test */
     public function it_can_assert_abort_path()

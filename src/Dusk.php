@@ -80,6 +80,7 @@ class Dusk
             throw $e;
         } finally {
             static::stopChromeDriver();
+
             return $this;
         }
     }
@@ -141,24 +142,26 @@ class Dusk
     /**
      * Set the initial browser window size.
      *
-     * @param $width The browser width in pixels.
-     * @param $height The browser height in pixels.
+     * @param $width the browser width in pixels
+     * @param $height the browser height in pixels
+     *
      * @return $this
      */
     public function windowSize(int $width, int $height)
     {
-        return $this->addArgument('--window-size=' . $width . ',' . $height);
+        return $this->addArgument('--window-size='.$width.','.$height);
     }
 
     /**
      * Set the user agent.
      *
-     * @param $useragent The user agent to use.
+     * @param $useragent the user agent to use
+     *
      * @return $this
      */
     public function userAgent(string $useragent)
     {
-        return $this->addArgument('--user-agent=' . $useragent);
+        return $this->addArgument('--user-agent='.$useragent);
     }
 
     /**

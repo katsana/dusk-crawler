@@ -5,7 +5,6 @@ namespace DuskCrawler;
 use Closure;
 use Laravel\Dusk\Browser;
 use React\Promise\Promise;
-use Throwable;
 
 class Inspector
 {
@@ -36,7 +35,6 @@ class Inspector
     /**
      * Assert using the browser.
      *
-     * @param  \Laravel\Dusk\Browser $browser
      * @return mixed
      */
     public function assert(Browser $browser)
@@ -47,7 +45,7 @@ class Inspector
     /**
      * Abort and exit the assertion.
      *
-     * @param  \Throwable|string $exception
+     * @param \Throwable|string $exception
      */
     public function abort($exception): bool
     {
@@ -57,7 +55,6 @@ class Inspector
 
         return true;
     }
-
 
     /**
      * Validate and throw if there is an exception.
