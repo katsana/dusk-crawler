@@ -33,14 +33,14 @@ class Dusk
      *
      * @var int
      */
-    protected $requestTimeout;
+    protected $requestTimeout = 30000;
 
     /**
      * Set timeout for the connect phase to remote WebDriver server in ms.
      *
      * @var int
      */
-    protected $connectTimeout;
+    protected $connectTimeout = 30000;
 
     /**
      * Initialises the dusk browser and starts the chrome driver.
@@ -51,8 +51,6 @@ class Dusk
     {
         $this->callerName = $callerName;
         $this->arguments = Collection::make();
-        $this->setRequestTimeout(30000);
-        $this->setConnectTimeout(30000);
     }
 
     /**
