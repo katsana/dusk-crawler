@@ -6,11 +6,11 @@ use Illuminate\Console\Application as Artisan;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\Browser;
 use Orchestra\Canvas\Core\CommandsProvider;
-use Symfony\Component\DomCrawler\Crawler;
 
 class DuskServiceProvider extends ServiceProvider
 {
-    use CommandsProvider;
+    use CommandsProvider,
+        Concerns\RegisterMacros;
 
     /**
      * Register services.
@@ -19,22 +19,7 @@ class DuskServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Browser::macro('inspectUsing', function ($seconds, $action) {
-            $inspector = $action instanceof Inspector ? $action : new Inspector($action);
-
-            return $inspector->promise(
-                $this->waitUsing($seconds, 100, function () use ($inspector) {
-                    return $inspector->assert($this);
-                })
-            );
-        });
-
-        Browser::macro('crawler', function () {
-            return new Crawler(
-                $this->driver->getPageSource() ?? '',
-                $this->driver->getCurrentURL() ?? ''
-            );
-        });
+        $this->registerBrowserMacros();
     }
 
     /**
