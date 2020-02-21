@@ -5,6 +5,7 @@ namespace DuskCrawler;
 use Laravel\Dusk\Browser;
 use React\Promise\Deferred;
 use React\Promise\Promise;
+use Throwable;
 
 class Inspector
 {
@@ -54,11 +55,11 @@ class Inspector
      *
      * @param \Throwable|string $exception
      */
-    public function reject($exception): bool
+    public function reject(Throwable $exception): bool
     {
-        $failedException = \is_string($exception)
-            ? Exceptions\InspectionFailed::make($exception)
-            : Exceptions\InspectionFailed::from($exception);
+        $failedException = ! $exception instanceof Exceptions\InspectionFailed
+            ? Exceptions\InspectionFailed::from($exception)
+            : $exception;
 
         $this->deferredPromise->reject($failedException);
 
@@ -67,15 +68,12 @@ class Inspector
 
     /**
      * Abort the promise.
-     *
-     * @param \Throwable|string $exception
-     *
-     * @deprecated v0.1.0
-     * @see static::reject()
      */
-    public function abort($exception): bool
+    public function abort(string $exception): bool
     {
-        return $this->reject($exception);
+        return $this->reject(
+            Exceptions\InspectionFailed::make($exception)
+        );
     }
 
     /**

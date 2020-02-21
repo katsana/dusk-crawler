@@ -40,7 +40,7 @@ class InspectorTest extends TestCase
 
         $browser = m::mock(Browser::class);
         $inspector = new Inspector(function ($browser, $inspector) {
-            return $inspector->reject('Foo');
+            return $inspector->abort('Foo');
         });
 
         $this->assertTrue($inspector->assert($browser));
