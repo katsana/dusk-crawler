@@ -25,9 +25,10 @@ class InspectorTest extends TestCase
         $inspector = new Inspector(function () {
             return true;
         });
+        $inspector->setBrowser($browser);
 
-        $this->assertTrue($inspector->assert($browser));
-        $promise = $inspector->promise($browser);
+        $this->assertTrue($inspector->assert());
+        $promise = $inspector->promise();
 
         $this->assertInstanceOf(Promise::class, $promise);
     }
@@ -40,11 +41,13 @@ class InspectorTest extends TestCase
 
         $browser = m::mock(Browser::class);
         $inspector = new Inspector(function ($browser, $inspector) {
-            return $inspector->abort('Foo');
+            return $inspector->reject('Foo');
         });
 
-        $this->assertTrue($inspector->assert($browser));
-        $inspector->promise($browser)->done();
+        $inspector->setBrowser($browser);
+
+        $this->assertTrue($inspector->assert());
+        $inspector->promise()->done();
     }
 
     /** @test */
@@ -55,10 +58,11 @@ class InspectorTest extends TestCase
 
         $browser = m::mock(Browser::class);
         $inspector = new Inspector(function ($browser, $inspector) {
-            return $inspector->abort(new \RuntimeException('Foobar'));
+            return $inspector->reject(new \RuntimeException('Foobar'));
         });
+        $inspector->setBrowser($browser);
 
-        $this->assertTrue($inspector->assert($browser));
-        $inspector->promise($browser)->done();
+        $this->assertTrue($inspector->assert());
+        $inspector->promise()->done();
     }
 }

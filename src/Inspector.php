@@ -2,9 +2,9 @@
 
 namespace DuskCrawler;
 
-use Closure;
 use Laravel\Dusk\Browser;
 use React\Promise\Promise;
+use React\Promise\Deferred;
 
 class Inspector
 {
@@ -16,20 +16,40 @@ class Inspector
     protected $action;
 
     /**
-     * Aborted exception.
+     * The deferred promise.
      *
-     * @var \DuskCrawler\Exceptions\InspectionFailed|null
+     * @var \React\Promise\Deferred
      */
-    protected $failedException;
+    protected $deferredPromise;
+
+    /**
+     * Browser implementation.
+     *
+     * @var \Laravel\Dusk\Browser|null
+     */
+    protected $browser;
 
     /**
      * Construct a new inspector.
      *
      * @param callable $action
      */
-    public function __construct(Closure $action)
+    public function __construct(callable $action)
     {
         $this->action = $action;
+        $this->deferredPromise = new Deferred();
+    }
+
+    /**
+     * Set browser instance.
+     *
+     * @return $this
+     */
+    public function setBrowser(Browser $browser)
+    {
+        $this->browser = $browser;
+
+        return $this;
     }
 
     /**
@@ -37,40 +57,44 @@ class Inspector
      *
      * @return mixed
      */
-    public function assert(Browser $browser)
+    public function assert()
     {
-        return \call_user_func($this->action, $browser, $this);
+        return \call_user_func($this->action, $this->browser, $this);
     }
 
     /**
-     * Abort and exit the assertion.
+     * Resolve the promise.
      *
-     * @param \Throwable|string $exception
+     * @return bool
      */
-    public function abort($exception): bool
+    public function resolve(): bool
     {
-        $this->failedException = \is_string($exception)
-            ? Exceptions\InspectionFailed::make($exception)
-            : Exceptions\InspectionFailed::from($exception);
+        $this->deferredPromise->resolve($this->browser);
 
         return true;
     }
 
     /**
-     * Validate and throw if there is an exception.
+     * Reject the promise.
      *
-     * @return void
+     * @param \Throwable|string $exception
      */
-    public function promise(Browser $browser): Promise
+    public function reject($exception): bool
     {
-        return new Promise(function ($resolve, $reject) use ($browser) {
-            if (! \is_null($this->failedException)) {
-                $reject($this->failedException);
-            }
+        $failedException = \is_string($exception)
+            ? Exceptions\InspectionFailed::make($exception)
+            : Exceptions\InspectionFailed::from($exception);
 
-            $resolve($browser);
-        }, static function () use ($browser) {
-            $browser->close();
-        });
+        $this->deferredPromise->reject($failedException);
+
+        return true;
+    }
+
+    /**
+     * Return resolved promise.
+     */
+    public function promise(): Promise
+    {
+        return $this->deferredPromise->promise();
     }
 }
