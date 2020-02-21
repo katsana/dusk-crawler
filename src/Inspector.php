@@ -61,7 +61,7 @@ class Inspector
      *
      * @return void
      */
-    public function resolve(Browser $browser): Promise
+    public function promise(Browser $browser): Promise
     {
         return new Promise(function ($resolve, $reject) use ($browser) {
             if (! \is_null($this->failedException)) {

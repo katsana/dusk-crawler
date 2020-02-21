@@ -22,7 +22,7 @@ class DuskServiceProvider extends ServiceProvider
         Browser::macro('waitUsingInspect', function ($seconds, $action) {
             $inspector = $action instanceof Inspector ? $action : new Inspector($action);
 
-            return $inspector->resolve(
+            return $inspector->promise(
                 $this->waitUsing($seconds, 100, function () use ($inspector) {
                     return $inspector->assert($this);
                 })

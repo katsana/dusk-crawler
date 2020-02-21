@@ -27,7 +27,7 @@ class InspectorTest extends TestCase
         });
 
         $this->assertTrue($inspector->assert($browser));
-        $promise = $inspector->resolve($browser);
+        $promise = $inspector->promise($browser);
 
         $this->assertInstanceOf(Promise::class, $promise);
     }
@@ -44,7 +44,7 @@ class InspectorTest extends TestCase
         });
 
         $this->assertTrue($inspector->assert($browser));
-        $inspector->resolve($browser)->done();
+        $inspector->promise($browser)->done();
     }
 
     /** @test */
@@ -59,6 +59,6 @@ class InspectorTest extends TestCase
         });
 
         $this->assertTrue($inspector->assert($browser));
-        $inspector->resolve($browser)->done();
+        $inspector->promise($browser)->done();
     }
 }
