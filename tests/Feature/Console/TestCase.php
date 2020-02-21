@@ -7,7 +7,7 @@ abstract class TestCase extends \Orchestra\Canvas\Core\Testing\TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */

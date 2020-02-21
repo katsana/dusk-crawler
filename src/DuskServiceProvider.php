@@ -5,8 +5,8 @@ namespace DuskCrawler;
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\Browser;
-use Symfony\Component\DomCrawler\Crawler;
 use Orchestra\Canvas\Core\CommandsProvider;
+use Symfony\Component\DomCrawler\Crawler;
 
 class DuskServiceProvider extends ServiceProvider
 {

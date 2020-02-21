@@ -2,8 +2,6 @@
 
 namespace DuskCrawler\Tests\Feature\Console;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
 class PageCommandTest extends TestCase
 {
     protected $files = [

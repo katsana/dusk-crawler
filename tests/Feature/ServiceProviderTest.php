@@ -3,7 +3,6 @@
 namespace DuskCrawler\Tests\Feature;
 
 use DuskCrawler\Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
 
 class ServiceProviderTest extends TestCase

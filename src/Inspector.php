@@ -3,8 +3,8 @@
 namespace DuskCrawler;
 
 use Laravel\Dusk\Browser;
-use React\Promise\Promise;
 use React\Promise\Deferred;
+use React\Promise\Promise;
 
 class Inspector
 {
@@ -23,16 +23,7 @@ class Inspector
     protected $deferredPromise;
 
     /**
-     * Browser implementation.
-     *
-     * @var \Laravel\Dusk\Browser|null
-     */
-    protected $browser;
-
-    /**
      * Construct a new inspector.
-     *
-     * @param callable $action
      */
     public function __construct(callable $action)
     {
@@ -41,36 +32,20 @@ class Inspector
     }
 
     /**
-     * Set browser instance.
-     *
-     * @return $this
-     */
-    public function setBrowser(Browser $browser)
-    {
-        $this->browser = $browser;
-
-        return $this;
-    }
-
-    /**
      * Assert using the browser.
      *
      * @return mixed
      */
-    public function assert()
+    public function assert(Browser $browser)
     {
-        return \call_user_func($this->action, $this->browser, $this);
+        return \call_user_func($this->action, $browser, $this);
     }
 
     /**
      * Resolve the promise.
-     *
-     * @return bool
      */
     public function resolve(): bool
     {
-        $this->deferredPromise->resolve($this->browser);
-
         return true;
     }
 
@@ -91,10 +66,27 @@ class Inspector
     }
 
     /**
+     * Abort the promise.
+     *
+     * @param \Throwable|string $exception
+     *
+     * @deprecated v0.1.0
+     * @see static::reject()
+     */
+    public function abort($exception): bool
+    {
+        return $this->reject($exception);
+    }
+
+    /**
      * Return resolved promise.
      */
-    public function promise(): Promise
+    public function promise(Browser $browser): Promise
     {
-        return $this->deferredPromise->promise();
+        $promise = $this->deferredPromise->promise();
+
+        $this->deferredPromise->resolve($browser);
+
+        return $promise;
     }
 }

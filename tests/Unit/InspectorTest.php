@@ -25,10 +25,9 @@ class InspectorTest extends TestCase
         $inspector = new Inspector(function () {
             return true;
         });
-        $inspector->setBrowser($browser);
 
-        $this->assertTrue($inspector->assert());
-        $promise = $inspector->promise();
+        $this->assertTrue($inspector->assert($browser));
+        $promise = $inspector->promise($browser);
 
         $this->assertInstanceOf(Promise::class, $promise);
     }
@@ -44,10 +43,8 @@ class InspectorTest extends TestCase
             return $inspector->reject('Foo');
         });
 
-        $inspector->setBrowser($browser);
-
-        $this->assertTrue($inspector->assert());
-        $inspector->promise()->done();
+        $this->assertTrue($inspector->assert($browser));
+        $inspector->promise($browser)->done();
     }
 
     /** @test */
@@ -60,9 +57,8 @@ class InspectorTest extends TestCase
         $inspector = new Inspector(function ($browser, $inspector) {
             return $inspector->reject(new \RuntimeException('Foobar'));
         });
-        $inspector->setBrowser($browser);
 
-        $this->assertTrue($inspector->assert());
-        $inspector->promise()->done();
+        $this->assertTrue($inspector->assert($browser));
+        $inspector->promise($browser)->done();
     }
 }
