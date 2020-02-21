@@ -52,8 +52,6 @@ class Inspector
 
     /**
      * Reject the promise.
-     *
-     * @param \Throwable|string $exception
      */
     public function reject(Throwable $exception): bool
     {
