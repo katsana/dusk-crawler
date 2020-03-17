@@ -71,6 +71,14 @@ class InstallCommand extends Command implements GeneratesCodeListener
     }
 
     /**
+     * Get the stub file for the generator.
+     */
+    public function getPublishedStubFileName(): ?string
+    {
+        return null;
+    }
+
+    /**
      * Get the default namespace for the class.
      */
     public function getDefaultNamespace(string $rootNamespace): string
