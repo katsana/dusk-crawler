@@ -37,7 +37,7 @@ use DuskCrawler\Exceptions\InspectionFailed;
 use Laravel\Dusk\Browser;
 
 function searchPackagist(string $packagist) {
-    $dusk = new DuskCrawler\Dusk('search-packagist');
+    $dusk = new Dusk('search-packagist');
 
     $dusk->headless()->disableGpu()->noSandbox();
     $dusk->userAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36');
@@ -52,7 +52,7 @@ function searchPackagist(string $packagist) {
                 $searchList = $browser->resolver->findOrFail('.search-list');
 
                 if (! $searchList->isDisplayed() || $searchList->getText() == '') {
-                    // result not ready, just return.
+                    // result not ready, just return false.
                     return false;
                 }
 
@@ -64,6 +64,7 @@ function searchPackagist(string $packagist) {
             });
 
         $promise->then(function ($browser) {
+            // Crawl the page on success.
             $packages = $browser->crawler()
               ->filter('div.package-item')->each(function ($div) {
                 return $div->text();
@@ -71,6 +72,7 @@ function searchPackagist(string $packagist) {
       
             dump($packages);
         })->otherwise(function (InspectionFailed $exception) {
+            // Handle abort state.
             dump("No result");
         })->done();
     });
