@@ -33,38 +33,53 @@ Let say you want to crawl Packagist to search for some package, and the input is
 ```php
 use DuskCrawler\Dusk;
 use DuskCrawler\Inspector;
+use DuskCrawler\Exceptions\InspectionFailed;
 use Laravel\Dusk\Browser;
 
 function searchPackagist(string $packagist) {
-$dusk = new DuskCrawler\Dusk('search-packagist');
+    $dusk = new DuskCrawler\Dusk('search-packagist');
 
-$dusk->headless()->disableGpu()->noSandbox();
+    $dusk->headless()->disableGpu()->noSandbox();
+    $dusk->userAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36');
 
-$dusk->userAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36');
+    $dusk->start();
 
-$dusk->start();
+    $dusk->browse(function ($browser) use ($packagist) {
+        $browser->visit('https://packagist.org/');
 
-$dusk->browse(function ($browser) use ($packagist) {
-    $browser->visit('https://packagist.org/')
-        ->keys('search_query[query]', $packagist, '{enter}')
-        ->inspectUsing(15, function (Browser $browser, Inspector $inspctor) {
-            $searchList = $browser->resolver->find('.search-list');
+        $promise = $browser->type('search_query[query]', $packagist, '{enter}')
+            ->inspectUsing(15, function (Browser $browser, Inspector $inspector) {
+                $searchList = $browser->resolver->findOrFail('.search-list');
 
-            if (is_null($searchList)) {
-                // result not ready, just return.
-                return;
-            }
+                if (! $searchList->isDisplayed() || $searchList->getText() == '') {
+                    // result not ready, just return.
+                    return false;
+                }
 
-            if ($searchList === 'No packages found.') {
-                return $inspector->abort('No packages found!');
-            } else {
+                if ($searchList->getText() == 'No packages found.') {
+                    return $inspector->abort('No packages found!');
+                }
+
                 return $inspector->resolve();
-            }
-        })->then(function ($browser) {
-            //
-        })->otherwise(function (InspectionFailed $exception) {
+            });
 
-        });
-});
+        $promise->then(function ($browser) {
+            $packages = $browser->crawler()
+              ->filter('div.package-item')->each(function ($div) {
+                return $div->text();
+            });
+      
+            dump($packages);
+        })->otherwise(function (InspectionFailed $exception) {
+            dump("No result");
+        })->done();
+    });
+
+    $dusk->stop();
+}
+
+searchPackagist('dusk-crawler');
+
+Dusk::closeAll();
 ```
 
