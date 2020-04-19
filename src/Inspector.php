@@ -53,11 +53,11 @@ class Inspector
     /**
      * Reject the promise.
      */
-    public function reject(Throwable $exception): bool
+    public function reject(Throwable $throwable): bool
     {
-        $failedException = ! $exception instanceof Exceptions\InspectionFailed
-            ? Exceptions\InspectionFailed::from($exception)
-            : $exception;
+        $failedException = ! $throwable instanceof Exceptions\InspectionFailed
+            ? Exceptions\InspectionFailed::from($throwable)
+            : $throwable;
 
         $this->deferredPromise->reject($failedException);
 
