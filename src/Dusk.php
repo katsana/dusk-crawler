@@ -136,6 +136,16 @@ class Dusk
     {
         return $this->addArgument('--no-sandbox');
     }
+    
+    /**
+     * Disable the SSL protection.
+     *
+     * @return $this
+     */
+    public function noSsl()
+    {
+        return $this->addArgument('--ignore-certificate-errors');
+    }
 
     /**
      * Set the initial browser window size.
