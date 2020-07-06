@@ -138,11 +138,11 @@ class Dusk
     }
     
     /**
-     * Disable the SSL protection.
+     * Ignore SSL certificate error messages.
      *
      * @return $this
      */
-    public function noSsl()
+    public function ignoreSslErrors()
     {
         return $this->addArgument('--ignore-certificate-errors');
     }
