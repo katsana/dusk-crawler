@@ -136,6 +136,16 @@ class Dusk
     {
         return $this->addArgument('--no-sandbox');
     }
+    
+    /**
+     * Ignore SSL certificate error messages.
+     *
+     * @return $this
+     */
+    public function ignoreSslErrors()
+    {
+        return $this->addArgument('--ignore-certificate-errors');
+    }
 
     /**
      * Set the initial browser window size.
