@@ -136,7 +136,17 @@ class Dusk
     {
         return $this->addArgument('--no-sandbox');
     }
-    
+
+    /**
+     * Disables the use of a zygote process for forking child processes.
+     *
+     * @return $this
+     */
+    public function noZygote()
+    {
+        return $this->noSandbox()->addArgument('--no-zygote');
+    }
+
     /**
      * Ignore SSL certificate error messages.
      *
