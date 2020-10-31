@@ -9,12 +9,24 @@ on:
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
-      fail-fast: false
       matrix:
-        php: [7.4, 7.3]
-        laravel: [6.x, 7.x, 8.x]
-        os: [ubuntu-latest, windows-latest]
+        os:
+          - "ubuntu-latest"
+          - "windows-latest"
+        php:
+          - "7.3"
+          - "7.4"
+        dependencies:
+          - "locked"
+          - "lowest"
+          - "highest"
+        laravel:
+          - "6.x"
+          - "7.x"
+        experimental:
+          - false
 
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }} on ${{ matrix.os }}
 
@@ -35,20 +47,33 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, sqlite3, pdo_sqlite, bcmath
           coverage: none
 
-      - name: Install dependencies
+      - name: Install Laravel Framework ${{ matrix.laravel }}
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-          composer update --prefer-dist --no-interaction --no-suggest
+      - name: Install dependencies
+        uses: "ramsey/composer-install@v1"
       - name: Execute tests
         run: vendor/bin/phpunit
-  legacy-tests:
+
+  tests-on-legacy-php:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
-      fail-fast: false
       matrix:
-        php: [7.3, 7.2]
-        laravel: [6.x, 7.x]
-        os: [ubuntu-latest, windows-latest]
+        os:
+          - "ubuntu-latest"
+          - "windows-latest"
+        php:
+          - "7.2"
+        dependencies:
+          - "locked"
+          - "lowest"
+          - "highest"
+        laravel:
+          - "6.x"
+          - "7.x"
+        experimental:
+          - false
 
     name: PHP${{ matrix.php }} with Laravel ${{ matrix.laravel }} on ${{ matrix.os }}
 
@@ -69,9 +94,10 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, sqlite3, pdo_sqlite, bcmath
           coverage: none
 
-      - name: Install dependencies
+      - name: Install Laravel Framework ${{ matrix.laravel }}
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-          composer update --prefer-dist --no-interaction --no-suggest
+      - name: Install dependencies
+        uses: "ramsey/composer-install@v1"
       - name: Execute tests
         run: vendor/bin/phpunit
