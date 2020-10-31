@@ -1,7 +1,7 @@
 Web Crawler using Laravel Dusk
 ===================
 
-[![Build Status](https://travis-ci.org/katsana/dusk-crawler.svg?branch=master)](https://travis-ci.org/katsana/dusk-crawler)
+[![tests](https://github.com/katsana/dusk-crawler/workflows/tests/badge.svg?branch=master)](https://github.com/katsana/dusk-crawler/actions?query=workflow%3Atests+branch%3Amaster)
 [![Latest Stable Version](https://poser.pugx.org/katsana/dusk-crawler/v/stable)](https://packagist.org/packages/katsana/dusk-crawler)
 [![Total Downloads](https://poser.pugx.org/katsana/dusk-crawler/downloads)](https://packagist.org/packages/katsana/dusk-crawler)
 [![Latest Unstable Version](https://poser.pugx.org/katsana/dusk-crawler/v/unstable)](https://packagist.org/packages/katsana/dusk-crawler)
